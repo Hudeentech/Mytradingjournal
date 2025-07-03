@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import BottomNav from './BottomNav';
@@ -6,22 +7,39 @@ const PipsCalculator: React.FC = () => {
   const [entryPrice, setEntryPrice] = useState('');
   const [exitPrice, setExitPrice] = useState('');
   const [lotSize, setLotSize] = useState('1');
-  const [currency, setCurrency] = useState('EURUSD');  const [marketType, setMarketType] = useState<'forex' | 'synthetic'>('forex');
-  const [result, setResult] = useState<{ pips: number; profit: number | null; points?: number }>({
-    pips: 0,
-    profit: null,
-  });
+  const [currency, setCurrency] = useState('EURUSD');
+  const [marketType, setMarketType] = useState<'forex' | 'synthetic'>('forex');
+  const [result, setResult] = useState<{ pips: number; profit: number | null; points?: number } | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const calculatePips = () => {
+    setError(null);
     const entry = parseFloat(entryPrice);
     const exit = parseFloat(exitPrice);
+    const lots = parseFloat(lotSize);
 
-    if (!entry || !exit) return;
+    if (
+      isNaN(entry) || isNaN(exit) || isNaN(lots) ||
+      entryPrice.trim() === '' || exitPrice.trim() === '' || lotSize.trim() === ''
+    ) {
+      setError('Please enter valid numbers for all fields.');
+      setResult(null);
+      return;
+    }
+    if (lots <= 0) {
+      setError('Lot size must be greater than 0.');
+      setResult(null);
+      return;
+    }
+    if (entry <= 0 || exit <= 0) {
+      setError('Entry and exit prices must be greater than 0.');
+      setResult(null);
+      return;
+    }
 
     let pips: number;
     let points: number | undefined;
     let profit: number;
-    const lots = parseFloat(lotSize);
 
     if (marketType === 'forex') {
       // For JPY pairs
@@ -51,13 +69,14 @@ const PipsCalculator: React.FC = () => {
       }
     }
 
+
     setResult({ pips, profit, points });
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 text-gray-900 dark:bg-gradient-to-br p-4 pb-24 transition-colors">
-      <div className="mx-auto space-y-4">
-        <Card className="border-none shadow-none bg-white text-gray-900">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 text-gray-900 dark:bg-gradient-to-br p-2 pb-24 transition-colors">
+      <div className="mx-auto max-w-md space-y-4">
+        <Card className="border-none shadow-none text-gray-900">
           <CardHeader>
             <CardTitle>Pips & Points Calculator</CardTitle>
           </CardHeader>
@@ -65,31 +84,34 @@ const PipsCalculator: React.FC = () => {
             <div className="flex space-x-4 mb-4">
               <button
                 onClick={() => setMarketType('forex')}
-                className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                className={`flex-1 py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                   marketType === 'forex'
-                    ? 'bg-blue-600 text-white dark:bg-blue-500'
+                    ? 'bg-gradient-to-tl from-indigo-500 to-blue-500 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200 '
                 }`}
+                aria-pressed={marketType === 'forex'}
               >
                 Forex
               </button>
               <button
                 onClick={() => setMarketType('synthetic')}
-                className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                className={`flex-1 py-2 px-4 w-full rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 ${
                   marketType === 'synthetic'
-                    ? 'bg-blue-600 text-white dark:bg-blue-500'
+                    ? 'bg-gradient-to-tl from-indigo-500 to-blue-500 text-white '
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200 '
                 }`}
+                aria-pressed={marketType === 'synthetic'}
               >
                 Deriv Synthetic
               </button>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="currency-select">
                 Currency Pair
               </label>
               <select
+                id="currency-select"
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
@@ -120,69 +142,95 @@ const PipsCalculator: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="entry-price">
                 Entry Price
               </label>
               <input
+                id="entry-price"
                 type="number"
                 step="0.00001"
                 value={entryPrice}
                 onChange={(e) => setEntryPrice(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
                 placeholder="Enter entry price"
+                inputMode="decimal"
+                autoComplete="off"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700  mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="exit-price">
                 Exit Price
               </label>
               <input
+                id="exit-price"
                 type="number"
                 step="0.00001"
                 value={exitPrice}
                 onChange={(e) => setExitPrice(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
                 placeholder="Enter exit price"
+                inputMode="decimal"
+                autoComplete="off"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" htmlFor="lot-size">
                 Lot Size
               </label>
               <input
+                id="lot-size"
                 type="number"
                 step="0.01"
-                min="0.01"
+                min="0.001"
                 value={lotSize}
                 onChange={(e) => setLotSize(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
                 placeholder="Enter lot size"
+                inputMode="decimal"
+                autoComplete="off"
               />
             </div>
 
             <button
               onClick={calculatePips}
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors "
+              className="w-full bg-gradient-to-tl from-indigo-500 to-blue-500 text-white py-2 rounded-md hover:bg-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               Calculate
             </button>
-            {result.pips !== 0 && (
-              <div className="mt-4 p-4 bg-gray-50 text-gray-900 rounded-md space-y-2 dark:bg-[#23242b] dark:text-gray-100">
+            {error && (
+              <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md dark:bg-red-900 dark:text-red-200" aria-live="polite">
+                {error}
+              </div>
+            )}
+            {result && (
+              <div className="mt-4 p-4 bg-gray-50 text-gray-900 rounded-md space-y-2 dark:bg-[#23242b] dark:text-gray-100" aria-live="polite">
                 {marketType === 'synthetic' && result.points !== undefined && (
                   <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                     Points: {result.points.toFixed(2)}
-                    {result.points > 0 ? ' up' : ' down'}
+                    {parseFloat(exitPrice) > parseFloat(entryPrice)
+                      ? ' up'
+                      : parseFloat(exitPrice) < parseFloat(entryPrice)
+                      ? ' down'
+                      : ''}
                   </p>
                 )}
                 <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
                   {marketType === 'forex' ? 'Pips' : 'Ticks'}: {Math.abs(result.pips).toFixed(1)}
-                  {result.pips > 0 ? ' profit' : ' loss'}
+                  {result.pips > 0
+                    ? ' profit'
+                    : result.pips < 0
+                    ? ' loss'
+                    : ' (no profit/loss)'}
                 </p>
                 {result.profit !== null && (
                   <p className="text-md text-gray-600 dark:text-gray-300">
-                    Estimated {result.profit > 0 ? 'Profit' : 'Loss'}: ${Math.abs(result.profit).toFixed(2)}
+                    Estimated {result.profit > 0
+                      ? 'Profit'
+                      : result.profit < 0
+                      ? 'Loss'
+                      : 'Profit/Loss'}: ${Math.abs(result.profit).toFixed(2)}
                   </p>
                 )}
               </div>

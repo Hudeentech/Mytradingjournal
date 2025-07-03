@@ -60,6 +60,17 @@ function getCollection() {
   return getDb().collection('trades');
 }
 
+// Health check endpoint for deployment debugging
+app.get('/api/health', async (req, res) => {
+  try {
+    // Try a simple DB command
+    await getDb().command({ ping: 1 });
+    res.json({ status: 'ok', db: true });
+  } catch (e) {
+    res.status(500).json({ status: 'error', db: false, error: e.message });
+  }
+});
+
 // User model functions
 function getUserCollection() {
   return getDb().collection('users');

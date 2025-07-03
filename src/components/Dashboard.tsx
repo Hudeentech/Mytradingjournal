@@ -167,6 +167,7 @@ const Dashboard: React.FC = () => {
 
   const filteredTrades = filterTradesByTimeframe(trades, timeframe);  const chartData = groupTradesForBarChart(filteredTrades);
   const stats = calculateStats(filteredTrades);
+  const netProfit = stats.totalProfit - stats.totalLoss;
 
   // Helper to group trades by day/week/month/year  // Helper to group trades for net P/L per period for win rate chart
   function groupNetPLPerPeriod(trades: TradeEntry[], tf: 'daily' | 'weekly' | 'monthly' | 'yearly') {
@@ -362,7 +363,7 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 mb-10">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-2 p-2 mb-10">
           <div className="glassy-card p-8 flex flex-col items-center">
             <h2 className="text-md lg:text-lg text-gray-500 mb-2 flex items-center gap-2">
               <FontAwesomeIcon icon={faCircleCheck} className="text-blue-500" /> Win Rate
@@ -394,7 +395,7 @@ const Dashboard: React.FC = () => {
         {/* Target Eclipse Chart */}
         <div className="relative">
           <TargetEclipseChart 
-            totalProfit={stats.totalProfit} 
+            totalProfit={netProfit} 
             target={generalTarget} 
             onEditTarget={() => setShowTargetModal(true)}
           />
