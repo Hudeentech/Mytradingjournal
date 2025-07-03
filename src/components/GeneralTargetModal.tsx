@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
 
+
 interface GeneralTargetModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (target: number) => void;
+  defaultTarget?: number;
 }
 
-const LOCAL_STORAGE_KEY = 'generalTarget';
-
-const GeneralTargetModal: React.FC<GeneralTargetModalProps> = ({ isOpen, onClose, onSave }) => {
+const GeneralTargetModal: React.FC<GeneralTargetModalProps> = ({ isOpen, onClose, onSave, defaultTarget }) => {
   const [target, setTarget] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
-      const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-      setTarget(saved || '');
+      setTarget(defaultTarget !== undefined ? String(defaultTarget) : '');
     }
-  }, [isOpen]);
+  }, [isOpen, defaultTarget]);
 
   if (!isOpen) return null;
 
@@ -24,7 +23,6 @@ const GeneralTargetModal: React.FC<GeneralTargetModalProps> = ({ isOpen, onClose
     e.preventDefault();
     const num = Number(target);
     if (!isNaN(num) && num >= 0) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, target);
       onSave(num);
       onClose();
     }

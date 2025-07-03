@@ -6,6 +6,7 @@ import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import SettingsPage from './components/SettingsPage';
 import PipsCalculator from './components/PipsCalculator';
+import { ToastProvider } from './components/ui/Toast';
 
 function RequireAuth({ children }: { children: JSX.Element }) {
   const token = localStorage.getItem('token');
@@ -44,9 +45,11 @@ function AppRoutes() {
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <AppRoutes />
-    </div>
+    <ToastProvider>
+      <div className="min-h-screen bg-gray-50">
+        <AppRoutes />
+      </div>
+    </ToastProvider>
   );
 }
 

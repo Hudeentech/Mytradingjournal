@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useToast } from './ui/Toast';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
 import BottomNav from './BottomNav';
 
@@ -11,6 +12,7 @@ const PipsCalculator: React.FC = () => {
   const [marketType, setMarketType] = useState<'forex' | 'synthetic'>('forex');
   const [result, setResult] = useState<{ pips: number; profit: number | null; points?: number } | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { showToast } = useToast();
 
   const calculatePips = () => {
     setError(null);
@@ -23,16 +25,19 @@ const PipsCalculator: React.FC = () => {
       entryPrice.trim() === '' || exitPrice.trim() === '' || lotSize.trim() === ''
     ) {
       setError('Please enter valid numbers for all fields.');
+      showToast('Please enter valid numbers for all fields.', 'error');
       setResult(null);
       return;
     }
     if (lots <= 0) {
       setError('Lot size must be greater than 0.');
+      showToast('Lot size must be greater than 0.', 'error');
       setResult(null);
       return;
     }
     if (entry <= 0 || exit <= 0) {
       setError('Entry and exit prices must be greater than 0.');
+      showToast('Entry and exit prices must be greater than 0.', 'error');
       setResult(null);
       return;
     }
@@ -199,11 +204,7 @@ const PipsCalculator: React.FC = () => {
             >
               Calculate
             </button>
-            {error && (
-              <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md dark:bg-red-900 dark:text-red-200" aria-live="polite">
-                {error}
-              </div>
-            )}
+            {/* Error toast handled globally */}
             {result && (
               <div className="mt-4 p-4 bg-gray-50 text-gray-900 rounded-md space-y-2 dark:bg-[#23242b] dark:text-gray-100" aria-live="polite">
                 {marketType === 'synthetic' && result.points !== undefined && (

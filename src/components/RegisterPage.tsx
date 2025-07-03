@@ -13,6 +13,7 @@ const RegisterPage: React.FC = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
   const validateForm = () => {
     if (username.length < 3) {
@@ -30,8 +31,10 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
     setError('');
     setSuccess('');
+    setIsRegistering(true);
 
     if (!validateForm()) {
+      setIsRegistering(false);
       return;
     }
 
@@ -47,6 +50,8 @@ const RegisterPage: React.FC = () => {
       setTimeout(() => navigate('/login'), 1500);
     } catch (err: any) {
       setError(err.message);
+    } finally {
+      setIsRegistering(false);
     }
   };
 
@@ -86,9 +91,10 @@ const RegisterPage: React.FC = () => {
           {success && <div className="text-green-600 text-sm text-center">{success}</div>}
           <button
             type="submit"
-            className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold py-3 rounded-lg shadow hover:scale-105 transition-transform"
+            className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold py-3 rounded-lg shadow hover:scale-105 transition-transform disabled:opacity-60"
+            disabled={isRegistering}
           >
-            Register Account
+            {isRegistering ? 'Registering ...' : 'Register Account'}
           </button>
         </form>
         <div className="text-center text-sm mt-4">

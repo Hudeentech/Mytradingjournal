@@ -19,9 +19,9 @@ const BottomNav: React.FC = () => {
         <FontAwesomeIcon 
           icon={faHome} 
           size="lg" 
-          className={isActive('/home') ? 'text-blue-600' : 'text-gray-600'} 
+          className={isActive('/home') ? 'text-indigo-500' : 'text-gray-600'} 
         />
-        <span className={`text-xs ${isActive('/home') ? 'text-blue-600' : 'text-gray-600'}`}>
+        <span className={`text-xs ${isActive('/home') ? 'text-indigo-500' : 'text-gray-600'}`}>
           Home
         </span>
       </button>
@@ -34,9 +34,9 @@ const BottomNav: React.FC = () => {
         <FontAwesomeIcon 
           icon={faChartSimple} 
           size="lg" 
-          className={isActive('/dashboard') ? 'text-blue-600' : 'text-gray-600'} 
+          className={isActive('/dashboard') ? 'text-indigo-500' : 'text-gray-600'} 
         />
-        <span className={`text-xs ${isActive('/dashboard') ? 'text-blue-600' : 'text-gray-600'}`}>
+        <span className={`text-xs ${isActive('/dashboard') ? 'text-indigo-500' : 'text-gray-600'}`}>
           Dashboard
         </span>
       </button>
@@ -50,9 +50,9 @@ const BottomNav: React.FC = () => {
         <FontAwesomeIcon 
           icon={faCalculator} 
           size="lg" 
-          className={isActive('/calculator') ? 'text-blue-600' : 'text-gray-600'} 
+          className={isActive('/calculator') ? 'text-indigo-500' : 'text-gray-600'} 
         />
-        <span className={`text-xs ${isActive('/calculator') ? 'text-blue-600' : 'text-gray-600'}`}>
+        <span className={`text-xs ${isActive('/calculator') ? 'text-indigo-500' : 'text-gray-600'}`}>
           Calculator
         </span>
       </button>
@@ -65,9 +65,9 @@ const BottomNav: React.FC = () => {
         <FontAwesomeIcon 
           icon={faCog} 
           size="lg" 
-          className={isActive('/settings') ? 'text-blue-600' : 'text-gray-600'} 
+          className={isActive('/settings') ? 'text-indigo-500' : 'text-gray-600'} 
         />
-        <span className={`text-xs ${isActive('/settings') ? 'text-blue-600' : 'text-gray-600'}`}>
+        <span className={`text-xs ${isActive('/settings') ? 'text-indigo-500' : 'text-gray-600'}`}>
           Settings
         </span>
       </button>

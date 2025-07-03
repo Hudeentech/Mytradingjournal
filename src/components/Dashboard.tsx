@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useToast } from './ui/Toast';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faArrowTrendUp, faArrowTrendDown, faCircleCheck } from '@fortawesome/free-solid-svg-icons';
@@ -34,20 +35,33 @@ const Dashboard: React.FC = () => {
   const [showLogout, setShowLogout] = useState(false);  
   const username = localStorage.getItem('username');
 
-  // Read general target from localStorage
-  const [generalTarget, setGeneralTarget] = useState<number>(() => {
-    const saved = localStorage.getItem('generalTarget');
-    return saved ? Number(saved) : 0;
-  });
+  // User-specific target
+  const [userTarget, setUserTarget] = useState<number>(0);
   const [showTargetModal, setShowTargetModal] = useState(false);
-  // Listen for changes to general target
+  const { showToast } = useToast ? useToast() : { showToast: () => {} };
+
+  // Fetch user target on mount
   useEffect(() => {
-    const handler = () => {
-      const saved = localStorage.getItem('generalTarget');
-      setGeneralTarget(saved ? Number(saved) : 0);
+    const fetchTarget = async () => {
+      try {
+        const res = await fetch(
+          import.meta.env.PROD
+            ? 'https://mytradingjournal.vercel.app/api/settings/target'
+            : 'http://localhost:4000/api/settings/target',
+          {
+            headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+            credentials: 'include',
+          }
+        );
+        if (res.ok) {
+          const data = await res.json();
+          setUserTarget(typeof data.target === 'number' ? data.target : 0);
+        }
+      } catch (e) {
+        // Optionally show a toast
+      }
     };
-    window.addEventListener('storage', handler);
-    return () => window.removeEventListener('storage', handler);
+    fetchTarget();
   }, []);
 
   // Fetch trades from backend on mount
@@ -370,12 +384,12 @@ const Dashboard: React.FC = () => {
             </h2>
             <p className="text-xl font-extrabold text-blue-600">{stats.winRate.toFixed(1)}%</p>
           </div>
-          <div className="glassy-card p-8 flex flex-col items-center">
-            <h2 className="text-md lg:text-lg text-gray-500 mb-2 flex items-center gap-2">
-              🎯 Target
-            </h2>
-            <p className="text-xl font-extrabold text-indigo-600">${generalTarget ? generalTarget.toFixed(2) : '--'}</p>
-          </div>
+        <div className="glassy-card p-8 flex flex-col items-center">
+          <h2 className="text-md lg:text-lg text-gray-500 mb-2 flex items-center gap-2">
+            🎯 Target
+          </h2>
+          <p className="text-xl font-extrabold text-indigo-600">${userTarget ? userTarget.toFixed(2) : '--'}</p>
+        </div>
           <div className="glassy-card p-8 flex flex-col items-center">
             <h2 className="text-md lg:text-lg text-gray-500 mb-2 flex items-center gap-2">
               <FontAwesomeIcon icon={faArrowTrendUp} className="text-green-500" /> Total Profit
@@ -396,14 +410,40 @@ const Dashboard: React.FC = () => {
         <div className="relative">
           <TargetEclipseChart 
             totalProfit={netProfit} 
-            target={generalTarget} 
+            target={userTarget} 
             onEditTarget={() => setShowTargetModal(true)}
           />
         </div>
         <GeneralTargetModal
           isOpen={showTargetModal}
           onClose={() => setShowTargetModal(false)}
-          onSave={setGeneralTarget}
+          defaultTarget={userTarget}
+          onSave={async (newTarget: number) => {
+            try {
+              const res = await fetch(
+                import.meta.env.PROD
+                  ? 'https://mytradingjournal.vercel.app/api/settings/target'
+                  : 'http://localhost:4000/api/settings/target',
+                {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                  },
+                  credentials: 'include',
+                  body: JSON.stringify({ target: Number(newTarget) }),
+                }
+              );
+              if (res.ok) {
+                setUserTarget(Number(newTarget));
+                showToast && showToast('Target updated!', 'success');
+              } else {
+                showToast && showToast('Failed to update target', 'error');
+              }
+            } catch (e) {
+              showToast && showToast('Failed to update target', 'error');
+            }
+          }}
         />
 
         {/* Performance Bar Chart using shadcn/ui Card and Recharts BarChart */}
@@ -432,8 +472,8 @@ const Dashboard: React.FC = () => {
                       cursor={false}
                       contentStyle={{ fontSize: '12px' }}
                     />
-                    <Bar dataKey="profit" fill="#22c55e" radius={[4, 4, 0, 0]} maxBarSize={45} name="Profit" />
-                    <Bar dataKey="loss" fill="#ef4444" radius={[4, 4, 0, 0]} maxBarSize={45} name="Loss" />
+                    <Bar dataKey="profit" fill="#00FFD4" radius={[4, 4, 0, 0]} maxBarSize={45} name="Profit" />
+                    <Bar dataKey="loss" fill="#187CFF" radius={[4, 4, 0, 0]} maxBarSize={45} name="Loss" />
                   </BarChart>
                 </ResponsiveContainer>
               </div>
