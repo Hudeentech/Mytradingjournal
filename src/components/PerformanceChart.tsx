@@ -7,13 +7,9 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import {
-  ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+} from "./ui/card";
+import type { ChartConfig } from "./ui/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./ui/chart";
 
 const rawChartData = [
   { date: "2024-04-01", desktop: 222, mobile: 150 },
@@ -209,7 +205,7 @@ export function PerformanceChart() {
       </div>
       <CardContent className="px-2 sm:p-6">
         <ChartContainer
-          config={chartConfig}
+          // config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
           <LineChart
@@ -237,7 +233,7 @@ export function PerformanceChart() {
                 <ChartTooltipContent
                   className="w-[150px]"
                   nameKey="views"
-                  labelFormatter={(value) => {
+                  labelFormatter={(value: string) => {
                     return new Date(value).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",

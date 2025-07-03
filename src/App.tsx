@@ -8,7 +8,8 @@ import SettingsPage from './components/SettingsPage';
 import PipsCalculator from './components/PipsCalculator';
 import { ToastProvider } from './components/ui/Toast';
 
-function RequireAuth({ children }: { children: JSX.Element }) {
+import type { ReactNode } from 'react';
+function RequireAuth({ children }: { children: ReactNode }) {
   const token = localStorage.getItem('token');
   const location = useLocation();
   if (!token) {

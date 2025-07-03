@@ -11,11 +11,11 @@ const PipsCalculator: React.FC = () => {
   const [currency, setCurrency] = useState('EURUSD');
   const [marketType, setMarketType] = useState<'forex' | 'synthetic'>('forex');
   const [result, setResult] = useState<{ pips: number; profit: number | null; points?: number } | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  // const [error, setError] = useState<string | null>(null);
   const { showToast } = useToast();
 
   const calculatePips = () => {
-    setError(null);
+    // setError(null);
     const entry = parseFloat(entryPrice);
     const exit = parseFloat(exitPrice);
     const lots = parseFloat(lotSize);
@@ -24,19 +24,19 @@ const PipsCalculator: React.FC = () => {
       isNaN(entry) || isNaN(exit) || isNaN(lots) ||
       entryPrice.trim() === '' || exitPrice.trim() === '' || lotSize.trim() === ''
     ) {
-      setError('Please enter valid numbers for all fields.');
+      // setError('Please enter valid numbers for all fields.');
       showToast('Please enter valid numbers for all fields.', 'error');
       setResult(null);
       return;
     }
     if (lots <= 0) {
-      setError('Lot size must be greater than 0.');
+      // setError('Lot size must be greater than 0.');
       showToast('Lot size must be greater than 0.', 'error');
       setResult(null);
       return;
     }
     if (entry <= 0 || exit <= 0) {
-      setError('Entry and exit prices must be greater than 0.');
+      // setError('Entry and exit prices must be greater than 0.');
       showToast('Entry and exit prices must be greater than 0.', 'error');
       setResult(null);
       return;

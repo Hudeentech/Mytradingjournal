@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+// ...existing code...
 import { useToast } from './ui/Toast';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -183,96 +184,7 @@ const Dashboard: React.FC = () => {
   const stats = calculateStats(filteredTrades);
   const netProfit = stats.totalProfit - stats.totalLoss;
 
-  // Helper to group trades by day/week/month/year  // Helper to group trades for net P/L per period for win rate chart
-  function groupNetPLPerPeriod(trades: TradeEntry[], tf: 'daily' | 'weekly' | 'monthly' | 'yearly') {
-    const now = new Date();
-    if (tf === 'daily') {
-      // Always show Mon-Sun, most recent first (ending with today)
-      const weekDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-      // Build last 7 days, ending with today
-      const days = Array.from({ length: 7 }, (_, i) => {
-        const d = new Date(now);
-        d.setDate(now.getDate() - (6 - i));
-        const idx = ((d.getDay() + 6) % 7);
-        return { name: weekDays[idx], date: d, idx };
-      });
-      // Map: day string (yyyy-mm-dd) -> net
-      const netMap = new Map<string, number>();
-      trades.forEach(trade => {
-        const date = trade.date instanceof Date ? trade.date : new Date(trade.date);
-        const key = date.toISOString().slice(0, 10);
-        const net = trade.type === 'profit' ? trade.amount : -trade.amount;
-        netMap.set(key, (netMap.get(key) || 0) + net);
-      });
-      return days.map(({ name, date }) => {
-        const key = date.toISOString().slice(0, 10);
-        return { name, net: netMap.get(key) || 0 };
-      });
-    } else if (tf === 'weekly') {
-      // Show last 8 weeks (including this week)
-      const getWeek = (d: Date) => {
-        const dt = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
-        const dayNum = dt.getUTCDay() || 7;
-        dt.setUTCDate(dt.getUTCDate() + 4 - dayNum);
-        const yearStart = new Date(Date.UTC(dt.getUTCFullYear(),0,1));
-        return Math.ceil((((dt as any) - (yearStart as any)) / 86400000 + 1) / 7);
-      };
-      const weeks = Array.from({ length: 8 }, (_, i) => {
-        const d = new Date(now);
-        d.setDate(now.getDate() - 7 * (7 - i));
-        const year = d.getFullYear();
-        const week = getWeek(d);
-        return { name: `${year}-W${week}`, year, week };
-      });
-      // Map: year-week -> net
-      const netMap = new Map<string, number>();
-      trades.forEach(trade => {
-        const date = trade.date instanceof Date ? trade.date : new Date(trade.date);
-        const year = date.getFullYear();
-        const week = getWeek(date);
-        const key = `${year}-W${week}`;
-        const net = trade.type === 'profit' ? trade.amount : -trade.amount;
-        netMap.set(key, (netMap.get(key) || 0) + net);
-      });
-      return weeks.map(({ name }) => ({ name, net: netMap.get(name) || 0 }));
-    } else if (tf === 'monthly') {
-      // Show last 12 months (including this month)
-      const months = Array.from({ length: 12 }, (_, i) => {
-        const d = new Date(now.getFullYear(), now.getMonth() - (11 - i), 1);
-        const year = d.getFullYear();
-        const month = (d.getMonth() + 1).toString().padStart(2, '0');
-        return { name: `${year}-${month}`, year, month };
-      });
-      // Map: year-month -> net
-      const netMap = new Map<string, number>();
-      trades.forEach(trade => {
-        const date = trade.date instanceof Date ? trade.date : new Date(trade.date);
-        const year = date.getFullYear();
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const key = `${year}-${month}`;
-        const net = trade.type === 'profit' ? trade.amount : -trade.amount;
-        netMap.set(key, (netMap.get(key) || 0) + net);
-      });
-      return months.map(({ name }) => ({ name, net: netMap.get(name) || 0 }));
-    } else if (tf === 'yearly') {
-      // Show last 5 years (including this year)
-      const years = Array.from({ length: 5 }, (_, i) => {
-        const year = now.getFullYear() - (4 - i);
-        return { name: `${year}`, year };
-      });
-      // Map: year -> net
-      const netMap = new Map<string, number>();
-      trades.forEach(trade => {
-        const date = trade.date instanceof Date ? trade.date : new Date(trade.date);
-        const year = date.getFullYear();
-        const key = `${year}`;
-        const net = trade.type === 'profit' ? trade.amount : -trade.amount;
-        netMap.set(key, (netMap.get(key) || 0) + net);
-      });
-      return years.map(({ name }) => ({ name, net: netMap.get(name) || 0 }));
-    }
-    return [];
-  }
+// groupNetPLPerPeriod is unused and removed to fix TS6133 error
 
   // Helper to group trades by day and provide target, profit, and loss for each day
   function groupTradesForBarChart(trades: TradeEntry[]) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faChartSimple, faPlus, faCalculator, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faChartSimple, faCalculator, faCog } from '@fortawesome/free-solid-svg-icons';
 
 const BottomNav: React.FC = () => {
   const navigate = useNavigate();

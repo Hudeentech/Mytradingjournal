@@ -1,9 +1,9 @@
 import React from "react";
-import type { TooltipProps } from "recharts";
+// ...existing code...
 
 export type ChartConfig = Record<string, { label: string; color?: string }>;
 
-export function ChartContainer({ children, className = "", config }: { children: React.ReactNode; className?: string; config?: ChartConfig }) {
+export function ChartContainer({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
     <div className={`rounded-2xl bg-white/60 dark:bg-gray-900/60 backdrop-blur-md border border-white/30 shadow-lg ${className}`}>
       {children}
@@ -33,4 +33,4 @@ export function ChartTooltipContent({ active, payload, label, className = "", la
   );
 }
 
-export type { ChartConfig };
+// ...existing code...

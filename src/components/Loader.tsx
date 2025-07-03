@@ -1,5 +1,5 @@
 
-import React from "react";
+// ...existing code...
 
 const Loader = () => {
   return (

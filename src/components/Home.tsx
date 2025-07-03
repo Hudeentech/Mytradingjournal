@@ -24,10 +24,10 @@ const Home: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingTrade, setEditingTrade] = useState<Trade | null>(null);
   const [loading, setLoading] = useState(true);
-  const [showLogout, setShowLogout] = useState(false);
+  const [showLogout] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
-  const [deleteError, setDeleteError] = useState('');
+  // const [deleteLoading, setDeleteLoading] = useState(false);
+  // const [deleteError, setDeleteError] = useState('');
   const navigate = useNavigate();  const username = localStorage.getItem('username');
 
   useEffect(() => {
@@ -105,7 +105,7 @@ const Home: React.FC = () => {
     return total + (trade.type === 'profit' ? trade.amount : -trade.amount);
   }, 0);
   const prevMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-  const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
+  // const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0);
   const tradesPrevMonth = trades.filter(t => t.date >= prevMonth && t.date < startOfMonth);
   const pnlPrevMonth = tradesPrevMonth.reduce((total, trade) => {
     return total + (trade.type === 'profit' ? trade.amount : -trade.amount);
@@ -192,7 +192,7 @@ const Home: React.FC = () => {
               <p className="text-gray-400 text-center">No trades yet</p>
             ) : (
               <TradeList
-                trades={recentTrades}
+                trades={recentTrades.map(t => ({ ...(t as any), target: (t as any).target || '' }))}
                 onEdit={trade => { setEditingTrade({ ...trade, date: new Date(trade.date) }); setIsModalOpen(true); }}
                 onDelete={deleteTrade}
               />
