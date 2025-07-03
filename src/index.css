@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --primary: #2563eb;
+  --secondary: #475569;
+  --success: #22c55e;
+  --danger: #ef4444;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: #f8fafc;
+  color: #1e293b;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Dark mode support */
+.dark,
+.dark body {
+  background-color: #181a20 !important;
+  color: #f3f4f6 !important;
+}
+
+.custom-fab-shadow {
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.147);
+}
+
+.glassy-card {
+  background: rgba(255, 255, 255, 0.164);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.136);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.glassy-nav {
+  background: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.17);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Dark mode support */
+.dark .glassy-card {
+  background: rgba(36, 37, 46, 0.7) !important;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+.dark .glassy-nav {
+  background: rgba(36, 37, 46, 0.7) !important;
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25) !important;
+  border-top: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* Optional: tweak input, card, and button colors for dark mode */
+.dark input, .dark textarea, .dark select {
+  background-color: #23242b !important;
+  color: #f3f4f6 !important;
+  border-color: #33364a !important;
+}
+
+.dark .border-gray-300 {
+  border-color: #33364a !important;
+}
+
+.dark .bg-white, .dark .bg-white\/80, .dark .bg-white\/60, .dark .bg-white\/70, .dark .bg-gray-100, .dark .bg-blue-100, .dark .bg-green-100, .dark .bg-red-100 {
+  background-color: #23242b !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .text-gray-700, .dark .text-gray-800, .dark .text-gray-900 {
+  color: #f3f4f6 !important;
+}
+
+/* Make all Card, Button, and Section backgrounds adapt to dark mode */
+.dark .bg-gradient-to-tr,
+.dark .bg-gradient-to-br,
+.dark .bg-gradient-to-r,
+.dark .bg-gradient-to-l,
+.dark .bg-gradient-to-t,
+.dark .bg-gradient-to-b {
+  background: linear-gradient(135deg, #23242b 0%, #181a20 100%) !important;
+}
+
+.dark .bg-gray-50,
+.dark .bg-gray-100,
+.dark .bg-indigo-200,
+.dark .bg-blue-50,
+.dark .bg-blue-100 {
+  background-color: #181a20 !important;
+}
+
+.dark .shadow,
+.dark .shadow-lg,
+.dark .shadow-xl,
+.dark .shadow-none {
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.25) !important;
+}
+
+.dark .border-gray-500 {
+  border-color: #33364a !important;
+}
