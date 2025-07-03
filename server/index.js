@@ -22,17 +22,29 @@ const allowedOrigins = [
 
 
 
-// Ensure MongoDB is connected before starting the server
-connectToDb()
+// Ensure MongoDB is connected before handling requests (for serverless)
+let mongoReady = false;
+let mongoError = null;
+const mongoPromise = connectToDb()
   .then(() => {
+    mongoReady = true;
     console.log('Connected to MongoDB');
   })
   .catch(err => {
+    mongoError = err;
     console.error('Failed to connect to MongoDB:', err);
-    process.exit(1);
   });
 
 // Middleware
+app.use(async (req, res, next) => {
+  if (!mongoReady) {
+    await mongoPromise;
+    if (mongoError) {
+      return res.status(500).json({ error: 'Failed to connect to database' });
+    }
+  }
+  next();
+});
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
@@ -79,5 +91,12 @@ app.use('/api/trades', tradeRoutes(getCollection, authenticateJWT));
 app.use('/api/settings/target', targetRoutes(getUserCollection, authenticateJWT));
 app.use('/api', userRoutes(getUserCollection, authenticateJWT));
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+
+// Export the app for serverless (Vercel)
+module.exports = app;
+
+// Only start the server if run directly (for local dev)
+if (require.main === module) {
+  const port = process.env.PORT || 4000;
+  app.listen(port, () => console.log(`Server running on http://localhost:${port}`));
+}
