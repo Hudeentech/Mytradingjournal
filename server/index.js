@@ -15,9 +15,11 @@ require('./config/passport');
 
 const app = express();
 
+// Update this list for all your frontend URLs (Render, Vercel, localhost, etc)
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://mytradingjournal.vercel.app'
+  'https://mytradingjournal.vercel.app',
+  'https://your-frontend-on-render.com'
 ];
 
 
@@ -59,8 +61,13 @@ app.use(cors({
   maxAge: 86400
 }));
 app.use(express.json());
+
+if (!process.env.JWT_SECRET || !process.env.SESSION_SECRET) {
+  throw new Error('JWT_SECRET and SESSION_SECRET must be set in environment variables!');
+}
+
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'secret',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {
