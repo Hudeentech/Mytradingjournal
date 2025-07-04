@@ -23,9 +23,8 @@ interface TradeEntry {
   notes?: string;
 }
 
-const API_URL = import.meta.env.PROD 
-  ? 'https://mytradingjournal.vercel.app/api/trades'
-  : 'http://localhost:4000/api/trades';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+const API_URL = `${API_BASE_URL}/trades`;
 
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -46,9 +45,7 @@ const Dashboard: React.FC = () => {
     const fetchTarget = async () => {
       try {
         const res = await fetch(
-          import.meta.env.PROD
-            ? 'https://mytradingjournal.vercel.app/api/settings/target'
-            : 'http://localhost:4000/api/settings/target',
+          `${API_BASE_URL}/settings/target`,
           {
             headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
             credentials: 'include',
@@ -333,9 +330,7 @@ const Dashboard: React.FC = () => {
           onSave={async (newTarget: number) => {
             try {
               const res = await fetch(
-                import.meta.env.PROD
-                  ? 'https://mytradingjournal.vercel.app/api/settings/target'
-                  : 'http://localhost:4000/api/settings/target',
+                `${API_BASE_URL}/settings/target`,
                 {
                   method: 'PUT',
                   headers: {
