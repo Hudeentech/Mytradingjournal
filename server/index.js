@@ -18,8 +18,7 @@ const app = express();
 // Update this list for all your frontend URLs (Render, Vercel, localhost, etc)
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://mytradingjournal.vercel.app',
-  'https://your-frontend-on-render.com'
+  'https://mytradingjournal.vercel.app'
 ];
 
 
