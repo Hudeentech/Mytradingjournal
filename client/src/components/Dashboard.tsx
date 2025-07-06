@@ -23,7 +23,7 @@ interface TradeEntry {
   notes?: string;
 }
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://mytradingjournal-api.vercel.app/api';
 const API_URL = `${API_BASE_URL}/trades`;
 
 const Dashboard: React.FC = () => {

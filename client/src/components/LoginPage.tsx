@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/fontawesome-svg-core/styles.css';
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:4000/api';
+const API_URL = import.meta.env.VITE_API_BASE_URL || 'https://mytradingjournal-api.vercel.app/api';
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({ username: '', password: '' });
