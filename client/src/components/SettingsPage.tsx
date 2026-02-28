@@ -1,10 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import BottomNav from './BottomNav';
+import {
+  ArrowLeft,
+  Settings as SettingsIcon,
+  User,
+  Lock,
+  LogOut,
+  Trash2,
+  Monitor
+} from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import ThemeSwitcher from './ThemeSwitcher';
-import CollapsibleCard from './CollapsibleCard';
+import { ModeToggle } from './ModeToggle';
 
 interface SettingsFormData {
   currentPassword: string;
@@ -57,7 +67,7 @@ const SettingsPage: React.FC = () => {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      
+
       setMessage({ type: 'success', text: 'Profile updated successfully!' });
     } catch (error: any) {
       setMessage({ type: 'error', text: error.message });
@@ -91,7 +101,7 @@ const SettingsPage: React.FC = () => {
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
-      
+
       setMessage({ type: 'success', text: 'Password updated successfully!' });
       setFormData(prev => ({
         ...prev,
@@ -112,163 +122,214 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-indigo-200 to-white flex flex-col justify-between">
-      <div className="w-full max-w-lg mx-auto pt-8 pb-20 px-4 sm:px-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-4 text-left">Settings</h1>
-        <button
-          className="mb-4 flex items-center gap-2 text-gray-600 hover:text-blue-600 font-semibold"
-          onClick={() => navigate(-1)}
-        >
-          <FontAwesomeIcon icon={faArrowLeft} /> Back
-        </button>
-        {/* Theme Switcher */}
-        <CollapsibleCard title="Theme" defaultOpen>
-          <ThemeSwitcher />
-        </CollapsibleCard>
-        {/* Profile Section */}
-        <CollapsibleCard title="Profile Information">
-          <form onSubmit={handleUpdateProfile} className="space-y-2">
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                value={formData.name}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                placeholder="Enter your name"
-              />
-            </div>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                placeholder="Enter your email"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold py-3 rounded-lg hover:scale-105 transition-transform disabled:opacity-50 mt-2 border border-gray-200"
-            >
-              Update Profile
-            </button>
-          </form>
-        </CollapsibleCard>
-        {/* Password Section */}
-        <CollapsibleCard title="Change Password">
-          <form onSubmit={handleUpdatePassword} className="space-y-2">
-            <div>
-              <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Current Password
-              </label>
-              <input
-                type="password"
-                id="currentPassword"
-                name="currentPassword"
-                value={formData.currentPassword}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                placeholder="Enter current password"
-              />
-            </div>
-            <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                New Password
-              </label>
-              <input
-                type="password"
-                id="newPassword"
-                name="newPassword"
-                value={formData.newPassword}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                placeholder="Enter new password"
-              />
-            </div>
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm New Password
-              </label>
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleInputChange}
-                className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-transparent"
-                placeholder="Confirm new password"
-              />
-            </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-blue-600 to-indigo-500 text-white font-semibold py-3 rounded-lg hover:scale-105 transition-transform disabled:opacity-50 mt-2 border border-gray-200"
-            >
-              Update Password
-            </button>
-          </form>
-        </CollapsibleCard>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      {/* Dashboard Style Header */}
+      <header className="border-b px-6 py-4 flex items-center justify-between sticky top-0 bg-background/95 backdrop-blur z-10">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)} className="mr-2">
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <SettingsIcon className="h-6 w-6 text-primary" />
+          <h1 className="text-xl font-bold tracking-tight">Settings</h1>
+        </div>
+        <div className="flex items-center gap-4">
+          <ModeToggle />
+        </div>
+      </header>
 
-        {/* Logout Button */}
-        <button
-          onClick={() => setShowLogoutModal(true)}
-          className="w-full mt-8 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold py-3 rounded-lg hover:scale-105 transition-transform border border-gray-200"
-        >
-          Log out
-        </button>
-        {/* Delete Account Button */}
-        <button
-          onClick={() => setShowDeleteModal(true)}
-          className="w-full mt-3  border-red-500 text-red-500 font-semibold py-3 rounded-lg hover:scale-105 transition-transform border"
-        >
-          Delete My Account
-        </button>
-        {/* Logout Confirmation Modal */}
-        {showLogoutModal && (
-          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl shadow-lg p-8 max-w-xs w-full flex flex-col items-center">
-              <h2 className="text-lg font-bold mb-4">Log out?</h2>
-              <p className="mb-6 text-gray-600 dark:text-gray-500 text-center">Are you sure you want to log out?</p>
-              <div className="flex gap-4">
-                <button
-                  onClick={() => handleLogout(navigate)}
-                  className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-4 py-2 rounded-lg font-semibold shadow hover:scale-105 transition-transform border border-gray-200"
-                >
-                  Yes, Logout
-                </button>
-                <button
-                  onClick={() => setShowLogoutModal(false)}
-                  className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 border border-gray-200"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
+      <main className="flex-1 p-4 md:p-8 pb-24 md:pb-8 max-w-4xl mx-auto w-full space-y-6">
+
+        {message.text && (
+          <div className={`p-4 rounded-lg flex items-center gap-2 text-sm font-medium ${message.type === 'error' ? 'bg-red-50 text-red-700 border border-red-200' : 'bg-green-50 text-green-700 border border-green-200'}`}>
+            {message.text}
           </div>
         )}
-        {/* Delete Account Modal */}
-        {showDeleteModal && (
-          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-            <div className="bg-white  rounded-xl shadow-lg p-4 max-w-xs w-full flex flex-col items-center">
-              <h2 className="text-xl font-semibold mb-4 text-red-700">Delete Account</h2>
-              <p className="mb-4 text-gray-700  text-center">
-                This action is <span className='font-medium text-red-600'>permanent</span> and will delete your account and all your trades. This cannot be undone.<br/><br/>
+
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Theme Switcher section */}
+          <Card className="md:col-span-2">
+            <CardHeader className="flex flex-row items-center gap-2 pb-2">
+              <Monitor className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <CardTitle className="text-lg">Appearance</CardTitle>
+                <CardDescription>Customize the theme and layout of your journal</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <ThemeSwitcher />
+            </CardContent>
+          </Card>
+
+          {/* Profile Section */}
+          <Card>
+            <CardHeader className="flex flex-row items-center gap-2 pb-2">
+              <User className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <CardTitle className="text-lg">Profile Information</CardTitle>
+                <CardDescription>Update your account details</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleUpdateProfile} className="space-y-4 pt-2">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Name</Label>
+                  <Input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    placeholder="Enter your name"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email address</Label>
+                  <Input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="Enter your email"
+                  />
+                </div>
+                <div className="pt-2">
+                  <Button type="submit" disabled={loading} className="w-full">
+                    {loading ? 'Updating...' : 'Update Profile'}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+
+          {/* Password Section */}
+          <Card>
+            <CardHeader className="flex flex-row items-center gap-2 pb-2">
+              <Lock className="h-5 w-5 text-muted-foreground" />
+              <div>
+                <CardTitle className="text-lg">Security</CardTitle>
+                <CardDescription>Change your account password</CardDescription>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleUpdatePassword} className="space-y-4 pt-2">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword">Current Password</Label>
+                  <Input
+                    type="password"
+                    id="currentPassword"
+                    name="currentPassword"
+                    value={formData.currentPassword}
+                    onChange={handleInputChange}
+                    placeholder="Enter current password"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password</Label>
+                  <Input
+                    type="password"
+                    id="newPassword"
+                    name="newPassword"
+                    value={formData.newPassword}
+                    onChange={handleInputChange}
+                    placeholder="Enter new password"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm New Password</Label>
+                  <Input
+                    type="password"
+                    id="confirmPassword"
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    placeholder="Confirm new password"
+                  />
+                </div>
+                <div className="pt-2">
+                  <Button type="submit" disabled={loading} className="w-full">
+                    {loading ? 'Updating...' : 'Update Password'}
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Danger Zone */}
+        <div className="pt-8 mb-8 border-t space-y-4">
+          <h3 className="text-lg font-medium text-red-600">Danger Zone</h3>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Button
+              variant="outline"
+              onClick={() => setShowLogoutModal(true)}
+              className="w-full flex items-center justify-center gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700"
+            >
+              <LogOut className="h-4 w-4" /> Log out
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => setShowDeleteModal(true)}
+              className="w-full flex items-center justify-center gap-2"
+            >
+              <Trash2 className="h-4 w-4" /> Delete Account
+            </Button>
+          </div>
+        </div>
+
+      </main>
+
+      {/* Logout Modal */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Card className="w-full max-w-md mx-4 shadow-xl border-muted">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-destructive">
+                <LogOut className="h-5 w-5" /> Confirm Logout
+              </CardTitle>
+              <CardDescription>
+                Are you sure you want to log out of your account?
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setShowLogoutModal(false)}>
+                Cancel
+              </Button>
+              <Button variant="destructive" onClick={() => handleLogout(navigate)}>
+                Yes, Logout
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Delete Account Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center">
+          <Card className="w-full max-w-md mx-4 shadow-xl border-destructive/50">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-destructive">
+                <Trash2 className="h-5 w-5" /> Delete Account
+              </CardTitle>
+              <CardDescription className="text-base text-foreground mt-2">
+                This action is <span className="font-semibold text-destructive">permanent</span> and will delete your account and all your trades. This cannot be undone.
+                <br /><br />
                 Are you absolutely sure you want to delete your account?
-              </p>
-              {deleteError && <div className="text-red-500 text-sm mb-2">{deleteError}</div>}
-              <div className="flex gap-4 mt-2">
-                <button
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {deleteError && (
+                <div className="p-3 mb-4 text-sm text-destructive bg-destructive/10 rounded-md">
+                  {deleteError}
+                </div>
+              )}
+              <div className="flex justify-end gap-3 mt-4">
+                <Button variant="outline" onClick={() => setShowDeleteModal(false)} disabled={deleteLoading}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  disabled={deleteLoading}
                   onClick={async () => {
                     setDeleteLoading(true);
                     setDeleteError('');
@@ -286,32 +347,15 @@ const SettingsPage: React.FC = () => {
                       setDeleteLoading(false);
                     }
                   }}
-                  disabled={deleteLoading}
-                  className="bg-gradient-to-r text-gray-200 from-red-600 to-pink-500  px-4 py-2 rounded-lg font-medium shadow hover:scale-105 transition-transform disabled:opacity-60 border border-gray-200"
                 >
                   {deleteLoading ? 'Deleting...' : 'Yes, Delete My Account'}
-                </button>
-                <button
-                  onClick={() => setShowDeleteModal(false)}
-                  className=" text-gray-700 px-4 py-2 rounded-lg font-semibold hover:bg-gray-300 border border-gray-200"
-                  disabled={deleteLoading}
-                >
-                  Cancel
-                </button>
+                </Button>
               </div>
-            </div>
-          </div>
-        )}
-        {message.text && (
-          <div className={`p-3 mt-4 rounded-lg ${
-            message.type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'
-          }`}>
-            {message.text}
-          </div>
-        )}
-      </div>
-      {/* Bottom Navigation */}
-      <BottomNav />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
     </div>
   );
 };

@@ -19,8 +19,8 @@ const AuthCallback: React.FC = () => {
   }, [navigate, searchParams]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-indigo-200">
-      <div className="text-2xl text-blue-600 font-bold animate-pulse">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-300">
+      <div className="text-2xl text-black font-bold animate-pulse">
         Completing login...
       </div>
     </div>

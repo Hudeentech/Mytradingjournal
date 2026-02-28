@@ -46,7 +46,7 @@ const ThemeSwitcher: React.FC = () => {
     <div className="p-4 flex flex-col gap-2 mb-4">
       <div className="grid grid-cols-3 gap-2">
         <button
-          className={`px-4 py-2 rounded-lg font-medium border-2 transition-all duration-150 ${theme === 'light' ? 'bg-gradient-to-r from-blue-400 to-indigo-400 text-white border-blue-400 scale-105' : 'bg-transparent border-gray-300 text-gray-700 hover:bg-blue-50'}`}
+          className={`px-4 py-2 rounded-lg font-medium border-2 transition-all duration-150 ${theme === 'light' ? 'bg-gradient-to-r from-gray-500 to-gray-500 text-white border-gray-400 scale-105' : 'bg-transparent border-gray-300 text-gray-700 hover:bg-gray-100'}`}
           onClick={() => setTheme('light')}
         >
           Light
@@ -58,7 +58,7 @@ const ThemeSwitcher: React.FC = () => {
           Dark
         </button>
         <button
-          className={`px-4 py-2 rounded-lg font-medium border-2 transition-all duration-150 ${theme === 'system' ? 'bg-gradient-to-r from-green-400 to-blue-400 text-white border-green-400 scale-105' : 'bg-transparent border-gray-300 text-gray-700 hover:bg-green-50'}`}
+          className={`px-4 py-2 rounded-lg font-medium border-2 transition-all duration-150 ${theme === 'system' ? 'bg-gradient-to-r from-green-400 to-gray-500 text-white border-green-400 scale-105' : 'bg-transparent border-gray-300 text-gray-700 hover:bg-green-50'}`}
           onClick={() => setTheme('system')}
         >
           System

@@ -23,9 +23,8 @@ const TradeList: React.FC<TradeListProps> = ({ trades, onEdit, onDelete }) => {
       {trades.map((trade) => (
         <div
           key={trade.id}
-          className={`p-5 rounded-2xl border-2 backdrop-blur-md glassy-card relative ${
-            trade.type === 'profit' ? 'border-green-200' : 'border-red-200'
-          }`}
+          className={`p-5 rounded-2xl border-2 backdrop-blur-md glassy-card relative ${trade.type === 'profit' ? 'border-green-200' : 'border-red-200'
+            }`}
         >
           {/* Edit/Delete buttons positioned absolutely at top right */}
           {(onEdit || onDelete) && (
@@ -33,7 +32,7 @@ const TradeList: React.FC<TradeListProps> = ({ trades, onEdit, onDelete }) => {
               {onEdit && (
                 <button
                   onClick={() => onEdit(trade)}
-                  className="px-3 py-1 text-xs rounded-lg bg-blue-100 text-blue-700 font-semibold hover:bg-blue-200 transition-colors"
+                  className="px-3 py-1 text-xs rounded-lg bg-gray-100 text-gray-800 font-semibold hover:bg-gray-200 transition-colors"
                 >
                   Edit
                 </button>
@@ -57,11 +56,10 @@ const TradeList: React.FC<TradeListProps> = ({ trades, onEdit, onDelete }) => {
                 {trade.type === 'profit' ? '+' : '-'}${Math.abs(trade.amount).toFixed(2)}
               </h3>
               <span
-                className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                  trade.type === 'profit'
+                className={`px-3 py-1 rounded-full text-xs font-semibold ${trade.type === 'profit'
                     ? 'bg-green-100 text-green-700'
                     : 'bg-red-100 text-red-600'
-                }`}
+                  }`}
               >
                 {typeof trade.type === 'string' && trade.type.length > 0
                   ? trade.type.charAt(0).toUpperCase() + trade.type.slice(1)

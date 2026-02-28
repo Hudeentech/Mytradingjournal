@@ -30,7 +30,7 @@ const GeneralTarget: React.FC<GeneralTargetProps> = ({ onTargetChange }) => {
         min="0"
         value={target}
         onChange={e => setTarget(e.target.value)}
-        className="rounded-lg border border-gray-300 p-2 bg-white/80 focus:border-blue-400 focus:ring-blue-200 outline-none"
+        className="rounded-lg border border-gray-300 p-2 bg-white/80 focus:border-gray-400 focus:ring-gray-200 outline-none"
         placeholder="Set your general target"
       />
     </div>

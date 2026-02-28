@@ -24,7 +24,7 @@ const CallbackPage: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <p className="text-blue-500 text-lg font-semibold animate-pulse">
+      <p className="text-gray-800 text-lg font-semibold animate-pulse">
         Logging you in...
       </p>
     </div>

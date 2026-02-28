@@ -26,7 +26,7 @@ const TargetEclipseChart: React.FC<TargetEclipseChartProps> = ({ totalProfit, ta
           📈 Track your progress
         </span>
         <button
-          className="mt-4 px-3 py-2 bg-gradient-to-tl from-indigo-500 to-blue-500 text-white rounded-lg font-medium shadow hover:bg-blue-700 transition-colors"
+          className="mt-4 px-3 py-2 bg-gradient-to-tl from-gray-900 to-gray-900 text-white rounded-lg font-medium shadow hover:bg-black transition-colors"
           onClick={onEditTarget}
         >
           Edit Target

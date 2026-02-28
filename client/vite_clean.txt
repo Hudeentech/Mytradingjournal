@@ -1,0 +1,30 @@
+[36mvite v6.3.5 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 27 modules transformed.
+Browserslist: browsers data (caniuse-lite) is 9 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+PWA v1.0.0
+mode      generateSW
+precache  6 entries (887.34 KiB)
+files generated
+  dist/sw.js
+  dist/workbox-5ffe50d4.js
+[31m✗[39m Build failed in 7.46s
+[31merror during build:
+[31m[vite-plugin-pwa:build] [plugin vite-plugin-pwa:build] src/components/Dashboard.tsx: There was an error during the build:
+  Transform failed with 1 error:
+C:/Users/HP/OneDrive/Desktop/my trading journal/Mytradingjournal/client/src/components/Dashboard.tsx:48:30: ERROR: The symbol "LineChart" has already been declared
+Additionally, handling the error in the 'buildEnd' hook caused the following error:
+  Transform failed with 1 error:
+C:/Users/HP/OneDrive/Desktop/my trading journal/Mytradingjournal/client/src/components/Dashboard.tsx:48:30: ERROR: The symbol "LineChart" has already been declared[31m
+file: [36mC:/Users/HP/OneDrive/Desktop/my trading journal/Mytradingjournal/client/src/components/Dashboard.tsx[31m
+    at getRollupError (file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/rollup/dist/es/shared/parseAst.js:400:41)
+    at file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/rollup/dist/es/shared/node-entry.js:23137:39
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+    at async catchUnfinishedHookActions (file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/rollup/dist/es/shared/node-entry.js:22601:16)
+    at async rollupInternal (file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/rollup/dist/es/shared/node-entry.js:23120:5)
+    at async buildEnvironment (file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46206:14)
+    at async Object.defaultBuildApp [as buildApp] (file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/vite/dist/node/chunks/dep-DBxKXgDP.js:46684:5)
+    at async CAC.<anonymous> (file:///C:/Users/HP/OneDrive/Desktop/my%20trading%20journal/Mytradingjournal/client/node_modules/vite/dist/node/cli.js:863:7)[39m

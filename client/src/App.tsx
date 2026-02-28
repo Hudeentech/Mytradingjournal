@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import './App.css';
 import Dashboard from './components/Dashboard';
-import Home from './components/Home';
 import LoginPage from './components/LoginPage';
 import RegisterPage from './components/RegisterPage';
 import SettingsPage from './components/SettingsPage';
@@ -24,19 +23,19 @@ function AppRoutes() {
     <Routes>
       {/* Public routes */}
       <Route path="/login" element={
-        token ? <Navigate to="/home" replace /> : <LoginPage />
+        token ? <Navigate to="/dashboard" replace /> : <LoginPage />
       } />
       <Route path="/register" element={
-        token ? <Navigate to="/home" replace /> : <RegisterPage />
+        token ? <Navigate to="/dashboard" replace /> : <RegisterPage />
       } />
       {/* Protected routes */}
       <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
-      <Route path="/home" element={<RequireAuth><Home /></RequireAuth>} />
+      <Route path="/home" element={<Navigate to="/dashboard" replace />} />
       <Route path="/settings" element={<RequireAuth><SettingsPage /></RequireAuth>} />
       <Route path="/calculator" element={<RequireAuth><PipsCalculator /></RequireAuth>} />
       {/* Root route - redirect to login if not authenticated, dashboard if authenticated */}
       <Route path="/" element={
-        token ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />
+        token ? <Navigate to="/dashboard" replace /> : <Navigate to="/login" replace />
       } />
       {/* Catch all route - redirect to login */}
       <Route path="*" element={<Navigate to="/" replace />} />

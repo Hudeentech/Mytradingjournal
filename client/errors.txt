@@ -1,0 +1,37 @@
+src/components/ActivityHeatmap.tsx(3,46): error TS6133: 'getDay' is declared but its value is never read.
+src/components/ActivityHeatmap.tsx(3,54): error TS6133: 'startOfYear' is declared but its value is never read.
+src/components/ActivityHeatmap.tsx(39,11): error TS6133: 'months' is declared but its value is never read.
+src/components/ConnectAccountDialog.tsx(8,24): error TS6133: 'AlertCircle' is declared but its value is never read.
+src/components/Dashboard.tsx(14,3): error TS6133: 'CreditCard' is declared but its value is never read.
+src/components/Dashboard.tsx(22,3): error TS2300: Duplicate identifier 'LineChart'.
+src/components/Dashboard.tsx(54,37): error TS6133: 'startOfYear' is declared but its value is never read.
+src/components/Dashboard.tsx(54,98): error TS6133: 'subDays' is declared but its value is never read.
+src/components/Dashboard.tsx(54,107): error TS6133: 'isAfter' is declared but its value is never read.
+src/components/Dashboard.tsx(57,16): error TS6133: 'Bar' is declared but its value is never read.
+src/components/Dashboard.tsx(57,21): error TS6133: 'BarChart' is declared but its value is never read.
+src/components/Dashboard.tsx(57,31): error TS2300: Duplicate identifier 'LineChart'.
+src/components/Dashboard.tsx(57,101): error TS6133: 'ComposedChart' is declared but its value is never read.
+src/components/Dashboard.tsx(242,7): error TS6133: 'maxEquity' is declared but its value is never read.
+src/components/Dashboard.tsx(243,7): error TS6133: 'maxDrawdown' is declared but its value is never read.
+src/components/Dashboard.tsx(244,7): error TS6133: 'runningEquity' is declared but its value is never read.
+src/components/Dashboard.tsx(304,11): error TS6133: 'sortedTrades' is declared but its value is never read.
+src/components/Dashboard.tsx(306,9): error TS6133: 'lastPeriod' is declared but its value is never read.
+src/components/Dashboard.tsx(341,9): error TS6133: 'weeklyStreak' is declared but its value is never read.
+src/components/Dashboard.tsx(342,9): error TS6133: 'monthlyStreak' is declared but its value is never read.
+src/components/Dashboard.tsx(739,34): error TS2322: Type '{ children: Element[]; data: { date: string | Date; equity: number; net: number; }[]; margin: { top: number; right: number; left: number; bottom: number; }; }' is not assignable to type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
+  Property 'data' does not exist on type 'IntrinsicAttributes & Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>'.
+src/components/Dashboard.tsx(814,201): error TS6133: 'entry' is declared but its value is never read.
+src/components/PerformanceChart.tsx(11,34): error TS2307: Cannot find module './ui/chart' or its corresponding type declarations.
+src/components/PerformanceChart.tsx(12,67): error TS2307: Cannot find module './ui/chart' or its corresponding type declarations.
+src/components/PerformanceChart.tsx(156,17): error TS2322: Type 'string | number | symbol' is not assignable to type 'Key | null | undefined'.
+  Type 'symbol' is not assignable to type 'Key | null | undefined'.
+src/components/PerformanceChart.tsx(247,15): error TS2769: No overload matches this call.
+  Overload 1 of 2, '(props: Props): Line', gave the following error.
+    Type 'string | number | symbol' is not assignable to type 'DataKey<any> | undefined'.
+      Type 'symbol' is not assignable to type 'DataKey<any> | undefined'.
+  Overload 2 of 2, '(props: Props, context: any): Line', gave the following error.
+    Type 'string | number | symbol' is not assignable to type 'DataKey<any> | undefined'.
+      Type 'symbol' is not assignable to type 'DataKey<any> | undefined'.
+src/components/PerformanceChart.tsx(249,38): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+src/components/PipsCalculator.tsx(8,39): error TS6133: 'TabsContent' is declared but its value is never read.
+src/components/PipsCalculator.tsx(9,22): error TS6133: 'ArrowRight' is declared but its value is never read.

@@ -49,8 +49,8 @@ const TradeModal: React.FC<TradeModalProps> = ({ isOpen, onClose, onSave, trade 
   };
 
   return (
-    <div className="fixed inset-0 z-100 bg-white/40 backdrop-blur-sm flex items-end justify-center">
-      <div className=" w-full max-w-md rounded-t-3xl border border-white/40 shadow-2xl p-6 pb-8 animate-slide-up" style={{background: 'rgba(255,255,255,0.5)', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)', backdropFilter: 'blur(16px)'}}>
+    <div className="fixed inset-0 z-100 bg-white/40 backdrop-blur-sm flex items-end sm:items-center justify-center pb-4 sm:pb-0">
+      <div className="w-[calc(100%-2rem)] sm:w-full max-w-md rounded-3xl border border-white/40 shadow-2xl p-6 pb-8 animate-slide-up" style={{ background: 'rgba(255,255,255,0.5)', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.18)', backdropFilter: 'blur(16px)' }}>
         <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-left">{trade ? 'Edit Trade' : 'Add New Trade'}</h2>
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
@@ -62,7 +62,7 @@ const TradeModal: React.FC<TradeModalProps> = ({ isOpen, onClose, onSave, trade 
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="mt-1 block w-full rounded-lg border-gray-300 p-3 outline outline-blue-200 focus:border-primary focus:ring-primary bg-white/60 backdrop-blur"
+              className="mt-1 block w-full rounded-lg border-gray-300 p-3 outline outline-gray-300 focus:border-primary focus:ring-primary bg-white/60 backdrop-blur"
               required
               placeholder='Enter amount in $'
             />
@@ -73,22 +73,20 @@ const TradeModal: React.FC<TradeModalProps> = ({ isOpen, onClose, onSave, trade 
               <button
                 type="button"
                 onClick={() => setType('profit')}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium border-2 transition-all duration-150 ${
-                  type === 'profit'
-                    ? 'bg-gradient-to-r from-green-500 to-blue-500 text-white border-blue-500 scale-105'
-                    : 'bg-transparent border-blue-400 text-blue-700 hover:bg-blue-50'
-                }`}
+                className={`flex-1 py-2 px-4 rounded-lg font-medium border-2 transition-all duration-150 ${type === 'profit'
+                  ? 'bg-gradient-to-r from-gray-800 to-black text-white border-black scale-105'
+                  : 'bg-transparent border-gray-400 text-gray-800 hover:bg-gray-100'
+                  }`}
               >
                 Profit
               </button>
               <button
                 type="button"
                 onClick={() => setType('loss')}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium border-2 transition-all duration-150 ${
-                  type === 'loss'
-                    ? 'bg-gradient-to-r from-red-500 to-pink-400 text-white border-red-500 scale-105'
-                    : 'bg-transparent border-red-400 text-red-700 hover:bg-red-50'
-                }`}
+                className={`flex-1 py-2 px-4 rounded-lg font-medium border-2 transition-all duration-150 ${type === 'loss'
+                  ? 'bg-gradient-to-r from-red-500 to-pink-400 text-white border-red-500 scale-105'
+                  : 'bg-transparent border-red-400 text-red-700 hover:bg-red-50'
+                  }`}
               >
                 Loss
               </button>
@@ -116,7 +114,7 @@ const TradeModal: React.FC<TradeModalProps> = ({ isOpen, onClose, onSave, trade 
             </button>
             <button
               type="submit"
-              className="px-6 py-2 bg-gradient-to-r from-blue-600 to-indigo-500 text-white rounded-lg font-bold shadow hover:scale-105 transition-transform duration-200"
+              className="px-6 py-2 bg-gradient-to-r from-gray-900 to-black text-white rounded-lg font-bold shadow hover:scale-105 transition-transform duration-200"
             >
               Save Trade
             </button>

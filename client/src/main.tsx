@@ -3,8 +3,10 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import '@fortawesome/fontawesome-svg-core/styles.css'
 import './index.css'
+import './index.css'
 import App from './App.tsx'
 import Loader from './components/Loader'
+import { ThemeProvider } from './components/ThemeProvider'
 
 // Remove FontAwesome icons initialization as faGoogle is no longer used
 
@@ -17,9 +19,11 @@ function Root() {
   if (loading) return <Loader />;
   return (
     <StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ThemeProvider>
     </StrictMode>
   );
 }

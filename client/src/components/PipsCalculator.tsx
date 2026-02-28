@@ -1,8 +1,12 @@
-
 import React, { useState } from 'react';
 import { useToast } from './ui/Toast';
-import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
-import BottomNav from './BottomNav';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Calculator, ArrowRight, RefreshCcw } from "lucide-react";
 
 const PipsCalculator: React.FC = () => {
   const [entryPrice, setEntryPrice] = useState('');
@@ -11,11 +15,10 @@ const PipsCalculator: React.FC = () => {
   const [currency, setCurrency] = useState('EURUSD');
   const [marketType, setMarketType] = useState<'forex' | 'synthetic'>('forex');
   const [result, setResult] = useState<{ pips: number; profit: number | null; points?: number } | null>(null);
-  // const [error, setError] = useState<string | null>(null);
-  const { showToast } = useToast();
+
+  const { showToast } = useToast ? useToast() : { showToast: () => { } };
 
   const calculatePips = () => {
-    // setError(null);
     const entry = parseFloat(entryPrice);
     const exit = parseFloat(exitPrice);
     const lots = parseFloat(lotSize);
@@ -24,20 +27,7 @@ const PipsCalculator: React.FC = () => {
       isNaN(entry) || isNaN(exit) || isNaN(lots) ||
       entryPrice.trim() === '' || exitPrice.trim() === '' || lotSize.trim() === ''
     ) {
-      // setError('Please enter valid numbers for all fields.');
       showToast('Please enter valid numbers for all fields.', 'error');
-      setResult(null);
-      return;
-    }
-    if (lots <= 0) {
-      // setError('Lot size must be greater than 0.');
-      showToast('Lot size must be greater than 0.', 'error');
-      setResult(null);
-      return;
-    }
-    if (entry <= 0 || exit <= 0) {
-      // setError('Entry and exit prices must be greater than 0.');
-      showToast('Entry and exit prices must be greater than 0.', 'error');
       setResult(null);
       return;
     }
@@ -47,7 +37,6 @@ const PipsCalculator: React.FC = () => {
     let profit: number;
 
     if (marketType === 'forex') {
-      // For JPY pairs
       if (currency.includes('JPY')) {
         pips = (exit - entry) * 100;
         profit = (pips * 0.01) * lots * 100;
@@ -57,189 +46,155 @@ const PipsCalculator: React.FC = () => {
       }
       points = undefined;
     } else {
-      // For Deriv synthetics
       const difference = exit - entry;
       points = Math.abs(difference);
-
-      // Calculate pips based on the specific synthetic index
       if (currency.includes('VOLATILITY')) {
-        pips = points * 100; // Convert points to pips for Volatility indices
+        pips = points * 100;
         profit = pips * lots;
       } else if (currency.includes('BOOM') || currency.includes('CRASH')) {
         pips = points * 100;
-        profit = pips * lots * 0.2; // Boom/Crash have different pip values
+        profit = pips * lots * 0.2;
       } else {
         pips = points * 100;
         profit = pips * lots;
       }
     }
 
-
     setResult({ pips, profit, points });
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-100 text-gray-900 dark:bg-gradient-to-br p-2 pb-24 transition-colors">
-      <div className="mx-auto max-w-md space-y-4">
-        <Card className="border-none shadow-none text-gray-900">
-          <CardHeader>
-            <CardTitle>Pips & Points Calculator</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex space-x-4 mb-4">
-              <button
-                onClick={() => setMarketType('forex')}
-                className={`flex-1 py-2 px-4 rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-                  marketType === 'forex'
-                    ? 'bg-gradient-to-tl from-indigo-500 to-blue-500 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 '
-                }`}
-                aria-pressed={marketType === 'forex'}
-              >
-                Forex
-              </button>
-              <button
-                onClick={() => setMarketType('synthetic')}
-                className={`flex-1 py-2 px-4 w-full rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400 ${
-                  marketType === 'synthetic'
-                    ? 'bg-gradient-to-tl from-indigo-500 to-blue-500 text-white '
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200 '
-                }`}
-                aria-pressed={marketType === 'synthetic'}
-              >
-                Deriv Synthetic
-              </button>
-            </div>
+  const resetCalculator = () => {
+    setEntryPrice('');
+    setExitPrice('');
+    setLotSize('1');
+    setResult(null);
+  }
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="currency-select">
-                Currency Pair
-              </label>
-              <select
-                id="currency-select"
-                value={currency}
-                onChange={(e) => setCurrency(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
-                title="Select market"
-                aria-label="Select market"
-              >
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calculator className="h-5 w-5 text-primary" />
+            Inputs
+          </CardTitle>
+          <CardDescription>Enter trade details to calculate potential P/L</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Tabs value={marketType} onValueChange={(val) => setMarketType(val as any)} className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="forex">Forex</TabsTrigger>
+              <TabsTrigger value="synthetic">Synthetics</TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <div className="space-y-2">
+            <Label>Symbol</Label>
+            <Select value={currency} onValueChange={setCurrency}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select currency" />
+              </SelectTrigger>
+              <SelectContent>
                 {marketType === 'forex' ? (
                   <>
-                    <option value="EURUSD">EUR/USD</option>
-                    <option value="GBPUSD">GBP/USD</option>
-                    <option value="USDJPY">USD/JPY</option>
-                    <option value="AUDUSD">AUD/USD</option>
-                    <option value="USDCAD">USD/CAD</option>
-                    <option value="NZDUSD">NZD/USD</option>
+                    <SelectItem value="EURUSD">EUR/USD</SelectItem>
+                    <SelectItem value="GBPUSD">GBP/USD</SelectItem>
+                    <SelectItem value="USDJPY">USD/JPY</SelectItem>
+                    <SelectItem value="AUDUSD">AUD/USD</SelectItem>
+                    <SelectItem value="USDCAD">USD/CAD</SelectItem>
                   </>
                 ) : (
                   <>
-                    <option value="VOLATILITY_10">Volatility 10 Index</option>
-                    <option value="VOLATILITY_25">Volatility 25 Index</option>
-                    <option value="VOLATILITY_50">Volatility 50 Index</option>
-                    <option value="VOLATILITY_75">Volatility 75 Index</option>
-                    <option value="VOLATILITY_100">Volatility 100 Index</option>
-                    <option value="BOOM_1000">Boom 1000 Index</option>
-                    <option value="CRASH_1000">Crash 1000 Index</option>
+                    <SelectItem value="VOLATILITY_10">Volatility 10</SelectItem>
+                    <SelectItem value="VOLATILITY_75">Volatility 75</SelectItem>
+                    <SelectItem value="BOOM_1000">Boom 1000</SelectItem>
+                    <SelectItem value="CRASH_1000">Crash 1000</SelectItem>
                   </>
                 )}
-              </select>
-            </div>
+              </SelectContent>
+            </Select>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="entry-price">
-                Entry Price
-              </label>
-              <input
-                id="entry-price"
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Entry</Label>
+              <Input
                 type="number"
                 step="0.00001"
                 value={entryPrice}
                 onChange={(e) => setEntryPrice(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
-                placeholder="Enter entry price"
-                inputMode="decimal"
-                autoComplete="off"
+                placeholder="0.00000"
               />
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1" htmlFor="exit-price">
-                Exit Price
-              </label>
-              <input
-                id="exit-price"
+            <div className="space-y-2">
+              <Label>Exit</Label>
+              <Input
                 type="number"
                 step="0.00001"
                 value={exitPrice}
                 onChange={(e) => setExitPrice(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
-                placeholder="Enter exit price"
-                inputMode="decimal"
-                autoComplete="off"
+                placeholder="0.00000"
               />
             </div>
+          </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1" htmlFor="lot-size">
-                Lot Size
-              </label>
-              <input
-                id="lot-size"
-                type="number"
-                step="0.01"
-                min="0.001"
-                value={lotSize}
-                onChange={(e) => setLotSize(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 "
-                placeholder="Enter lot size"
-                inputMode="decimal"
-                autoComplete="off"
-              />
-            </div>
+          <div className="space-y-2">
+            <Label>Lot Size</Label>
+            <Input
+              type="number"
+              step="0.01"
+              value={lotSize}
+              onChange={(e) => setLotSize(e.target.value)}
+              placeholder="1.00"
+            />
+          </div>
 
-            <button
-              onClick={calculatePips}
-              className="w-full bg-gradient-to-tl from-indigo-500 to-blue-500 text-white py-2 rounded-md hover:bg-blue-400 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-400"
-            >
+          <div className="flex gap-2 pt-2">
+            <Button variant="outline" size="icon" onClick={resetCalculator}>
+              <RefreshCcw className="h-4 w-4" />
+            </Button>
+            <Button onClick={calculatePips} className="flex-1">
               Calculate
-            </button>
-            {/* Error toast handled globally */}
-            {result && (
-              <div className="mt-4 p-4 bg-gray-50 text-gray-900 rounded-md space-y-2 dark:bg-[#23242b] dark:text-gray-100" aria-live="polite">
-                {marketType === 'synthetic' && result.points !== undefined && (
-                  <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                    Points: {result.points.toFixed(2)}
-                    {parseFloat(exitPrice) > parseFloat(entryPrice)
-                      ? ' up'
-                      : parseFloat(exitPrice) < parseFloat(entryPrice)
-                      ? ' down'
-                      : ''}
-                  </p>
-                )}
-                <p className="text-lg font-semibold text-gray-800 dark:text-gray-100">
-                  {marketType === 'forex' ? 'Pips' : 'Ticks'}: {Math.abs(result.pips).toFixed(1)}
-                  {result.pips > 0
-                    ? ' profit'
-                    : result.pips < 0
-                    ? ' loss'
-                    : ' (no profit/loss)'}
-                </p>
-                {result.profit !== null && (
-                  <p className="text-md text-gray-600 dark:text-gray-300">
-                    Estimated {result.profit > 0
-                      ? 'Profit'
-                      : result.profit < 0
-                      ? 'Loss'
-                      : 'Profit/Loss'}: ${Math.abs(result.profit).toFixed(2)}
-                  </p>
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="flex flex-col justify-center h-full bg-muted/30">
+        <CardContent className="text-center space-y-6 pt-6">
+          {!result ? (
+            <div className="text-muted-foreground flex flex-col items-center justify-center h-48 opacity-50">
+              <Calculator className="h-12 w-12 mb-2" />
+              <p>Enter values to see results</p>
+            </div>
+          ) : (
+            <div className="animate-in fade-in zoom-in duration-300">
+              <div className="mb-6">
+                <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider mb-1">Estimated P/L</h3>
+                <div className={`text-5xl font-bold ${result.profit! >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                  ${Math.abs(result.profit!).toFixed(2)}
+                </div>
+                <div className={`text-sm font-medium mt-1 ${result.profit! >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {result.profit! >= 0 ? 'Profit' : 'Loss'}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mt-8">
+                <div className="bg-background p-4 rounded-lg border">
+                  <div className="text-2xl font-bold">{Math.abs(result.pips).toFixed(1)}</div>
+                  <div className="text-xs text-muted-foreground uppercase">Pips/Ticks</div>
+                </div>
+                {result.points !== undefined && (
+                  <div className="bg-background p-4 rounded-lg border">
+                    <div className="text-2xl font-bold">{result.points.toFixed(2)}</div>
+                    <div className="text-xs text-muted-foreground uppercase">Points</div>
+                  </div>
                 )}
               </div>
-            )}
-          </CardContent>
-        </Card>
-        <BottomNav />
-      </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };

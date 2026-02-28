@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignOutAlt, faPlus, faArrowTrendUp, faArrowTrendDown } from '@fortawesome/free-solid-svg-icons';
 import BottomNav from './BottomNav';
 import { handleLogout } from '../utils/auth';
+import Loader from './Loader';
 
 interface Trade {
   id: string;
@@ -26,7 +27,7 @@ const Home: React.FC = () => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   // const [deleteLoading, setDeleteLoading] = useState(false);
   // const [deleteError, setDeleteError] = useState('');
-  const navigate = useNavigate();  const username = localStorage.getItem('username');
+  const navigate = useNavigate(); const username = localStorage.getItem('username');
 
   useEffect(() => {
     setLoading(true);
@@ -119,21 +120,17 @@ const Home: React.FC = () => {
   const recentTrades = trades.slice(0, 5);
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-100">
-        <div className="text-2xl text-blue-600 font-bold animate-pulse">Loading...</div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-indigo-200 to-white flex flex-col items-center justify-center">
+    <div className="min-h-screen bg-gradient-to-tr from-gray-200 to-white flex flex-col items-center justify-center">
       <div className="p-4 flex justify-between items-center w-full max-w-lg">
         <h1 className="text-xl font-semibold">
           Welcome, {username || 'Trader'}
         </h1>
         <div className="relative">
-          <button 
+          <button
             onClick={() => setShowLogoutModal(true)}
             className="p-2 hover:bg-gray-200 rounded-full"
             title="Open menu"
@@ -142,17 +139,17 @@ const Home: React.FC = () => {
           </button>
           {showLogout && (
             <div className="absolute right-0 mt-2 py-2 w-48 bg-white rounded-md z-20">              <button
-                onClick={() => handleLogout(navigate)}
-                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
-              >
-                Sign out
-              </button>
+              onClick={() => handleLogout(navigate)}
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+            >
+              Sign out
+            </button>
             </div>
           )}
         </div>
       </div>
       <div className="flex-1 flex flex-col items-center justify-center w-full">
-        <div className="backdrop-blur-lg bg-gradient-to-tr from-indigo-200 to-white border border-white/20 shadow-lg min-h-svh rounded-3xl p-4 w-full max-w-lg flex flex-col items-center">
+        <div className="backdrop-blur-lg bg-gradient-to-tr from-gray-200 to-white border border-white/20 shadow-lg min-h-svh rounded-3xl p-4 w-full max-w-lg flex flex-col items-center">
           <h1 className="text-2xl font-medium text-gray-900 text-left mb-8 w-full tracking-tight">Trading Performance</h1>
           <div className={`w-full h-[230px] flex justify-center flex-col gap-4 text-left p-4 rounded-2xl border border-white glassy-card relative 
           }`}>
@@ -162,7 +159,7 @@ const Home: React.FC = () => {
                   setEditingTrade(null);
                   setIsModalOpen(true);
                 }}
-                className="absolute -top-18 -right-6 w-14 h-14 flex items-center border-2 border-white justify-center bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-full shadow-lg focus:outline-none hover:scale-105 transition-transform duration-200"
+                className="absolute -top-18 -right-6 w-14 h-14 flex items-center border-2 border-white justify-center bg-gradient-to-r from-gray-800 to-black text-white rounded-full shadow-lg focus:outline-none hover:scale-105 transition-transform duration-200"
                 title="Add Trade"
                 aria-label="Add Trade"
               >
@@ -172,9 +169,8 @@ const Home: React.FC = () => {
                 Total P/L
                 <FontAwesomeIcon icon={trendIcon} className={isProfit ? 'text-green-500' : 'text-red-500'} />
               </p>
-              <p className={`text-5xl font-medium tracking-tight ${
-                isProfit ? 'text-green-600' : 'text-red-500'
-              }`}>
+              <p className={`text-5xl font-medium tracking-tight ${isProfit ? 'text-green-600' : 'text-red-500'
+                }`}>
                 {isProfit ? '+' : '-'}${Math.abs(totalPnL).toFixed(2)}
               </p>
               <span className={`absolute left-0 -bottom-10 text-xs font-medium flex items-center gap-1 px-2 py-1 rounded-lg bg-white/40 backdrop-blur-md ${pnlThisMonth >= pnlPrevMonth ? 'text-green-700' : 'text-red-700'}`}
@@ -208,16 +204,16 @@ const Home: React.FC = () => {
       {/* Logout Confirmation Modal */}
       {showLogoutModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white  rounded-xl shadow-lg p-4 max-w-xs w-full flex flex-col items-left">
+          <div className="bg-white rounded-xl shadow-lg p-5 max-w-xs w-[calc(100%-2rem)] sm:w-full flex flex-col items-left">
             <h2 className="text-xl text-left font-bold mb-4 text-red-600">Confirm Logout</h2>
             <p className="mb-4 text-gray-700 dark:text-gray-500 text-left">
-              You are about to log out of your account. This will end your current session and you will need to log in again to access your trading journal.<br/><br/>
+              You are about to log out of your account. This will end your current session and you will need to log in again to access your trading journal.<br /><br />
               Are you sure you want to continue?
             </p>
             <div className="flex gap-4 w-full mt-2">
               <button
                 onClick={() => handleLogout(navigate)}
-                className="bg-gradient-to-r from-blue-600 to-indigo-500 text-white px-4 py-2 rounded-lg w-full font-semibold shadow hover:scale-105 transition-transform"
+                className="bg-gradient-to-r from-gray-900 to-black text-white px-4 py-2 rounded-lg w-full font-semibold shadow hover:scale-105 transition-transform"
               >
                 Yes, Log me out
               </button>
